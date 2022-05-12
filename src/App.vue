@@ -1,26 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>
+    Vue-cal
+  </h1>
+  <VueCal :time-from="8 * 60" 
+          :time-to="19 * 60"  
+          :disable-views="['years', 'year', 'month','day']" 
+          hide-view-selector
+          hide-title-bar>
+  </VueCal>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
 export default {
+  components:{
+    VueCal
+  },
   name: 'App',
-  components: {
-    HelloWorld
-  }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
