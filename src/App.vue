@@ -8,17 +8,18 @@
           :time-cell-height="90"
           hide-view-selector
           hide-title-bar
+          locale="ko"
           :events="events">
   </VueCal>
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
 import VueCal from 'vue-cal';
+import 'vue-cal/dist/i18n/ko.js';
 import 'vue-cal/dist/vuecal.css';
 
 //vue calendar
-
 export default {
   components:{
     VueCal,
@@ -30,15 +31,33 @@ export default {
            start: '2022-05-14 10:10',
            end: '2022-05-14 11:10',
            content: '불가 <br> 60분',
-           class: 'is_next_class'
+           class: 'is_next_class',
         },
         {
            start: '2022-05-14 11:10',
            end: '2022-05-14 12:10',
            content: '불가 <br> 60분',
            class: 'notallowd_class'
-        }
+        },
+
+        {
+           start: '2022-05-12 08:10',
+           end: '2022-05-12 12:10',
+           content: '불가 <br> 240분',
+           class: 'is_next_class'
+        },
+        {
+           start: '2022-05-12 12:10',
+           end: '2022-05-12 13:05',
+           content: '불가 <br> 55분',
+           class: 'notallowd_class'
+        },
       ]); 
+
+
+      onMounted(()=>{
+        console.log(events);
+      })
    
     
     return{
@@ -60,7 +79,6 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: gray;
-  border-radius: 7px;
   color: #fff;
 }
 
@@ -70,8 +88,8 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: gray;
-  border-bottom: 1px solid #eee;
-  border-radius: 7px;
+  /* border-radius: 7px; */
+  border-bottom: 5px solid rgba(0, 128, 0, 0.459);
 }
 
 
@@ -80,6 +98,11 @@ export default {
 .vuecal{
   background-color: #eee;
   box-shadow: none;
+}
+
+
+.vuecal__heading .weekday-label{
+  flex-direction: column; 
 }
 
 .vuecal__cell:before{
@@ -122,5 +145,6 @@ export default {
 .vuecal__time-column .vuecal__time-cell-line:before {
   border: none;
 }
+
 
 </style>
