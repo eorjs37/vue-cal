@@ -66,7 +66,7 @@ export default {
            class: 'impossible_class'
         },
         {
-           start: '2022-05-18 11:30',
+           start: '2022-05-18 08:30',
            end: '2022-05-18 11:55',
            content: '<span class="status_text">예약</span><span class="minute">(25분)</span>',
            class: 'possible_class'
@@ -128,6 +128,7 @@ body{
 
 .vuecal__weekdays-headings{
   padding-right: 0;
+  padding-left: 3.2em;
 }
 
 .vuecal__cell{
