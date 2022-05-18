@@ -2,14 +2,27 @@
   <h1>
     Vue-cal
   </h1>
-  <VueCal :time-from="8 * 60" 
+  <VueCal :time-from="9 * 60" 
           :time-to="19 * 60"  
           :disable-views="['years', 'year', 'month','day']"
-          :time-cell-height="90"
+          :time-cell-height="60"
           hide-view-selector
           hide-title-bar
           locale="ko"
+          :time-step="30"
           :events="events">
+
+          <template v-slot:weekday-heading="{ heading }" class="week_head">
+             <div> 
+               <span class="circle"></span>
+             </div>
+             <span class="day">
+               {{ heading.label }}
+             </span>
+             <span class="date">
+               20
+             </span>
+          </template>
   </VueCal>
 </template>
 
@@ -28,27 +41,26 @@ export default {
   setup(){
     const events = reactive([
         {
-           start: '2022-05-14 10:10',
-           end: '2022-05-14 11:10',
+           start: '2022-05-16 10:10',
+           end: '2022-05-16 11:10',
            content: '불가 <br> 60분',
            class: 'is_next_class',
         },
         {
-           start: '2022-05-14 11:10',
-           end: '2022-05-14 12:10',
+           start: '2022-05-16 11:10',
+           end: '2022-05-16 12:10',
            content: '불가 <br> 60분',
            class: 'notallowd_class'
         },
-
         {
-           start: '2022-05-12 08:10',
-           end: '2022-05-12 12:10',
+           start: '2022-05-17 08:10',
+           end: '2022-05-17 12:10',
            content: '불가 <br> 240분',
            class: 'is_next_class'
         },
         {
-           start: '2022-05-12 12:10',
-           end: '2022-05-12 13:05',
+           start: '2022-05-17 12:10',
+           end: '2022-05-17 13:05',
            content: '불가 <br> 55분',
            class: 'notallowd_class'
         },
@@ -68,6 +80,14 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+*{
+  box-sizing: border-box;
+}
+body{
+  font-family: 'Noto Sans KR', sans-serif;
+}
 .business-hours {
   background-color: rgba(255, 255, 0, 0.2);
   border: solid rgba(255, 210, 0, 0.6);
@@ -93,13 +113,18 @@ export default {
 }
 
 
-/*================= vue-cal 관련 css custom =================*/
+/*================= vue-cal css custom =================*/
 
 .vuecal{
-  background-color: #eee;
+  background-color: #f7f7f7;
   box-shadow: none;
+  padding: 13px 30px;
 }
 
+/* weekday-head */
+.vuecal__heading{
+  height: 57px;
+}
 
 .vuecal__heading .weekday-label{
   flex-direction: column; 
@@ -115,6 +140,7 @@ export default {
 
 .vuecal__weekdays-headings{
   border-bottom: none;
+  padding-bottom: 17px;
 }
 
 /* 현재 상태는 다 none 이나 색 없애기 */
@@ -142,9 +168,30 @@ export default {
   align-items: center;
 }
 
-.vuecal__time-column .vuecal__time-cell-line:before {
-  border: none;
+/*================= vue-cal 관련 css custom =================*/
+.status{
+  height: 10px;
+}
+.circle{
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #e76d24;
 }
 
+.day{
+  display: inline-block;
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 500;
+  padding: 0;
+}
 
+.date{
+  display: inline-block;
+  font-size: 12px;
+  line-height: 17px;
+  color: #a1a1a1;
+}
 </style>
