@@ -2,16 +2,21 @@
   <h1>
     Vue-cal
   </h1>
+  <button @click="changeView()">일별</button>
+  <button @click="stickySplitLabels = !stickySplitLabels">Change</button>
   <VueCal :time-from="9 * 60" 
           :time-to="19 * 60"  
-          :disable-views="['years', 'year', 'month','day']"
+          :disable-views="['years', 'year', 'month']"
           :time-cell-height="60"
           hide-view-selector
           hide-title-bar
           hide-weekends
           locale="ko"
           :time-step="30"
-          :events="events">
+          :events="events"
+          :split-days="customDaySplitLabels"
+          :sticky-split-labels="stickySplitLabels"
+          ref="vuecal">
 
           <template v-slot:weekday-heading="{ heading }" class="week_head">
              <div> 
@@ -24,11 +29,15 @@
                {{  filterDate(heading.date)  }}
              </span>
           </template>
+
+          <template v-slot:split-label="{ split }">
+            <strong :style="`color: ${split.color}`">{{ split.label }}</strong>
+          </template>
   </VueCal>
 </template>
 
 <script>
-import {  onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/i18n/ko.js';
 import 'vue-cal/dist/vuecal.css';
@@ -40,10 +49,12 @@ export default {
   },
   name: 'App',
   setup(){
+    const vuecal = ref(null);
+    const stickySplitLabels = ref(true);
     const events = reactive([
         {
-           start: '2022-05-16 10:10',
-           end: '2022-05-16 11:10',
+           start: '2022-05-16 09:00',
+           end: '2022-05-16 10:10',
            content: '<span class="status_text">불가</span><span class="minute">(60분)</span>',
            class: 'impossible_class',
         },
@@ -71,6 +82,12 @@ export default {
            content: '<span class="status_text">예약</span><span class="minute">(25분)</span>',
            class: 'possible_class'
         },
+        {
+           start: '2022-05-19 08:30',
+           end: '2022-05-19 11:55',
+           content: '<span class="status_text">예약</span><span class="minute">(25분)</span>',
+           class: 'possible_class'
+        },
       ]);
 
       const currentDate = ref(new Date().getDate());
@@ -81,18 +98,39 @@ export default {
         return date.getDate();
       }
 
+      const customDaySplitLabels = reactive(
+        [
+          { label: 'John', color: 'blue', class: 'split1' },
+          { label: 'Tom', color: 'green', class: 'split2' },
+          { label: 'Kate', color: 'orange', class: 'split3' },
+          { label: 'Jess', color: 'red', class: 'split4' }
+        ]
+      );
+
+      const changeView = () =>{
+        const  { switchView } = vuecal.value;
+        switchView('day',new Date());
+      }
+
 
       onMounted(()=>{
         events.forEach((val)=>{
           val['date'] = new Date(val.start).getDate();
-        })
-      })
+        });
+
+        console.log(vuecal.value);
+        
+      });
    
     
     return{
+      vuecal,
+      stickySplitLabels,
       events,
       currentDate,
-      filterDate
+      filterDate,
+      changeView,
+      customDaySplitLabels
     }
   }
 }
