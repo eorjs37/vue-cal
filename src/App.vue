@@ -16,9 +16,11 @@
           :events="events"
           :split-days="customDaySplitLabels"
           :sticky-split-labels="stickySplitLabels"
+          :min-cell-width="minCellWidth"
+          :min-split-width="minSplitWidth"
           ref="vuecal">
 
-          <template v-slot:weekday-heading="{ heading }" class="week_head">
+          <template v-slot:weekday-heading="{ heading }">
              <div> 
                <span class="circle" :class="currentDate === filterDate(heading.date)  ?  'have_class' : 'not_class'"></span>
              </div>
@@ -107,6 +109,9 @@ export default {
         ]
       );
 
+      const minCellWidth = ref(200);
+      const minSplitWidth = ref(200);
+
       const changeView = () =>{
         const  { switchView } = vuecal.value;
         switchView('day',new Date());
@@ -130,7 +135,9 @@ export default {
       currentDate,
       filterDate,
       changeView,
-      customDaySplitLabels
+      customDaySplitLabels,
+      minCellWidth,
+      minSplitWidth
     }
   }
 }
@@ -149,16 +156,23 @@ body{
 
 /*================= vue-cal css custom =================*/
 
-.vuecal{
+/* .vuecal{
   background-color: #f7f7f7;
   box-shadow: none;
   padding: 13px 30px;
+} */
+
+.vuecal {
+   background-color: #f7f7f7;
+    height: 100%;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+     padding: 13px 30px;
 }
 
 /* weekday-head */
-.vuecal__heading{
-  height: 57px;
-}
+.vuecal__heading {height: 140px !important;}
+
 
 .vuecal__heading .weekday-label{
   flex-direction: column; 
@@ -218,6 +232,11 @@ body{
   font-size: 13px;
   font-weight: 500;
   color: #1f1f1f;
+}
+
+/* margin-top 수정 */
+.vuecal--overflow-x.vuecal--week-view.vuecal--sticky-split-labels .vuecal__time-column{
+  margin-top: 9.1em;
 }
 
 /*================= vue-cal 관련 css custom =================*/
