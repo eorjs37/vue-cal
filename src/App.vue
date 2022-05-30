@@ -2,7 +2,8 @@
   <h1>
     Vue-cal
   </h1>
-  <button @click="changeView()">일별</button>
+  <button @click="changeView('day')">일별</button>
+  <button @click="changeView('week')">주별</button>
   <button @click="stickySplitLabels = !stickySplitLabels">Change</button>
   <VueCal :time-from="9 * 60" 
           :time-to="19 * 60"  
@@ -14,7 +15,7 @@
           locale="ko"
           :time-step="30"
           :events="events"
-          :split-days="customDaySplitLabels"
+          :split-days="splitLabels"
           :sticky-split-labels="stickySplitLabels"
           :min-cell-width="minCellWidth"
           :min-split-width="minSplitWidth"
@@ -36,6 +37,13 @@
             <strong :style="`color: ${split.color}`">{{ split.label }}</strong>
           </template>
   </VueCal>
+
+  <h1 class="title">달력</h1>
+  <div>
+    <VueCal class="cal" :time="false" active-view="month" :disable-views="['years', 'year','week','day']">
+
+    </VueCal>
+  </div>
 </template>
 
 <script>
@@ -53,42 +61,51 @@ export default {
   setup(){
     const vuecal = ref(null);
     const stickySplitLabels = ref(true);
+    
+    const splitLabels = reactive([]);
+
     const events = reactive([
         {
-           start: '2022-05-16 09:00',
-           end: '2022-05-16 10:10',
+           start: '2022-05-23 09:00',
+           end: '2022-05-23 10:10',
            content: '<span class="status_text">불가</span><span class="minute">(60분)</span>',
            class: 'impossible_class',
+           split: 1
         },
         {
-           start: '2022-05-16 11:10',
-           end: '2022-05-16 12:10',
+           start: '2022-05-23 11:10',
+           end: '2022-05-23 12:10',
            content: '<span class="status_text">불가</span><span class="minute">(60분)</span>',
-           class: 'impossible_class'
+           class: 'impossible_class',
+           split: 1
         },
         {
-           start: '2022-05-17 08:10',
-           end: '2022-05-17 12:10',
+           start: '2022-05-24 08:10',
+           end: '2022-05-24 12:10',
            content: '<span class="status_text">불가</span><span class="minute">(240분)</span>',
-           class: 'impossible_class'
+           class: 'impossible_class',
+           split: 2
         },
         {
-           start: '2022-05-17 12:10',
-           end: '2022-05-17 13:05',
+           start: '2022-05-24 12:10',
+           end: '2022-05-24 13:05',
            content: '<span class="status_text">불가</span><span class="minute">(55분)</span>',
-           class: 'impossible_class'
+           class: 'impossible_class',
+           split: 2
         },
         {
-           start: '2022-05-18 08:30',
-           end: '2022-05-18 11:55',
+           start: '2022-05-25 08:30',
+           end: '2022-05-25 11:55',
            content: '<span class="status_text">예약</span><span class="minute">(25분)</span>',
-           class: 'possible_class'
+           class: 'possible_class',
+           split: 3  
         },
         {
-           start: '2022-05-19 08:30',
-           end: '2022-05-19 11:55',
+           start: '2022-05-26 08:30',
+           end: '2022-05-26 11:55',
            content: '<span class="status_text">예약</span><span class="minute">(25분)</span>',
-           class: 'possible_class'
+           class: 'possible_class',
+           split: 3
         },
       ]);
 
@@ -113,28 +130,31 @@ export default {
       const minSplitWidth = ref(200);
 
       const changeView = () =>{
-        const  { switchView } = vuecal.value;
-        switchView('day',new Date());
+        // const  { switchView } = vuecal.value;
+        // switchView(view,new Date());
+      }
+
+      const modal = () =>{
+        alert('팝업 클릭');
       }
 
 
       onMounted(()=>{
         events.forEach((val)=>{
           val['date'] = new Date(val.start).getDate();
-        });
-
-        console.log(vuecal.value);
-        
+        }); 
       });
    
     
     return{
       vuecal,
+      splitLabels,
       stickySplitLabels,
       events,
       currentDate,
       filterDate,
       changeView,
+      modal,
       customDaySplitLabels,
       minCellWidth,
       minSplitWidth
@@ -154,6 +174,9 @@ body{
   margin: 0;
 }
 
+.title{
+  text-align: center;
+}
 /*================= vue-cal css custom =================*/
 
 /* .vuecal{
@@ -232,6 +255,10 @@ body{
   font-size: 13px;
   font-weight: 500;
   color: #1f1f1f;
+}
+
+.vuecal--overflow-x.vuecal--week-view .vuecal__time-column{
+  margin-top: 9.1em;
 }
 
 /* margin-top 수정 */
@@ -323,4 +350,8 @@ body{
   display: block;
 }
 
+
+.cal{
+  background-color: #fff;
+}
 </style>
