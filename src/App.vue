@@ -5,6 +5,16 @@
   <button @click="changeView('day')">일별</button>
   <button @click="changeView('week')">주별</button>
   <button @click="stickySplitLabels = !stickySplitLabels">Change</button>
+  <div class="date_head">
+    <h1 class="title">
+      <span @click="calendar.setVisible()">Head</span>
+      <div class="calendar" v-if="calendar.isVisible">
+        <VueCal class="cal" :time="false" active-view="month" :disable-views="['years', 'year','week','day']">
+
+        </VueCal>
+      </div>  
+    </h1>
+  </div>
   <VueCal :time-from="9 * 60" 
           :time-to="19 * 60"  
           :disable-views="['years', 'year', 'month']"
@@ -66,8 +76,8 @@ export default {
 
     const events = reactive([
         {
-           start: '2022-05-23 09:00',
-           end: '2022-05-23 10:10',
+           start: '2022-05-31 09:00',
+           end: '2022-05-31 10:10',
            content: '<span class="status_text">불가</span><span class="minute">(60분)</span>',
            class: 'impossible_class',
            split: 1
@@ -129,14 +139,28 @@ export default {
       const minCellWidth = ref(200);
       const minSplitWidth = ref(200);
 
-      const changeView = () =>{
-        // const  { switchView } = vuecal.value;
-        // switchView(view,new Date());
+      const changeView = (view) =>{
+        const  { switchView } = vuecal.value;
+        if(view === 'day'){
+          switchView(view,new Date());
+        }
+        else{
+          switchView(view);
+        }
       }
 
       const modal = () =>{
         alert('팝업 클릭');
       }
+
+      //캘린더 관련한 객체
+      const calendar = reactive({
+         //달력 visible
+         isVisible:false,
+         setVisible: ()=>{
+           calendar.isVisible = !calendar.isVisible
+         }
+      })
 
 
       onMounted(()=>{
@@ -155,6 +179,7 @@ export default {
       filterDate,
       changeView,
       modal,
+      calendar,
       customDaySplitLabels,
       minCellWidth,
       minSplitWidth
@@ -178,13 +203,6 @@ body{
   text-align: center;
 }
 /*================= vue-cal css custom =================*/
-
-/* .vuecal{
-  background-color: #f7f7f7;
-  box-shadow: none;
-  padding: 13px 30px;
-} */
-
 .vuecal {
    background-color: #f7f7f7;
     height: 100%;
@@ -353,5 +371,22 @@ body{
 
 .cal{
   background-color: #fff;
+}
+
+.date_head{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date_head > .title{
+  cursor: pointer;
+  position: relative;
+}
+
+.date_head > .title > .calendar{
+  position: absolute;
+  top: 50px;
+  z-index: 999;
 }
 </style>
